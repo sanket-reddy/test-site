@@ -1,6 +1,23 @@
-import "@/styles/globals.css";
-import type { AppProps } from "next/app";
+// pages/_app.js
 
-export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+import "@/styles/globals.css";
+import { AppProps } from "next/app";
+// import { Inter as FontSans } from "next/font/google";
+
+// const fontSans = FontSans({
+//   subsets: ["latin"],
+//   variable: "--font-sans",
+// });
+
+import { ClerkProvider } from "@clerk/nextjs";
+function MyApp({ Component, pageProps }: AppProps) {
+  return (
+    <ClerkProvider>
+      <div className={`font-sans antialiased `}>
+        <Component {...pageProps} />
+      </div>
+    </ClerkProvider>
+  );
 }
+
+export default MyApp;
