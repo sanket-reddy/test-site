@@ -2,9 +2,9 @@ import { Webhook } from "svix";
 import { WebhookEvent } from "@clerk/nextjs/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { buffer } from "micro";
-import CreateUser from "../../lib/db/actions/user.create";
 import { clerkClient } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
+import adduser from "../api/adduser";
 
 export const config = {
   api: {
@@ -64,31 +64,18 @@ export default async function handler(
   const eventType = evt.type;
 
   if (eventType === "user.created") {
-    const user = {
-      clerkId: evt.data.id,
-      username: evt.data.username!,
-      email: evt.data.email_addresses[0].email_address,
-      firstName: evt.data.first_name,
-      lastName: evt.data.last_name,
-      photo: evt.data.image_url,
-    };
+    let { id, first_name, last_name } = evt.data;
 
-    if (id) {
-      const newUser = await CreateUser(user);
-
-      if (newUser) {
-        await clerkClient.users.updateUserMetadata(id, {
-          publicMetadata: {
-            userId: newUser._id,
-          },
-        });
+    let user = { id, first_name, last_name };
+    try {
+      let newuser = await adduser(user);
+      if (newuser) {
+        return res.status(200).json({ user: newuser, Response: "Success" });
       }
-      return NextResponse.json({ message: "OK", user: newUser });
+    } catch (error) {
+      console.log(`an error has occured ${error}`);
     }
+
+    return res.status(200).json({ response: "Success" });
   }
-
-  console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
-  console.log("Webhook body:", body);
-
-  return res.status(200).json({ response: "Success" });
 }
