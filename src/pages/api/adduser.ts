@@ -1,6 +1,6 @@
 import connectDb from "@/lib/db";
 import { CreateUserParams } from "../../../types";
-import User from "../../lib/db/models/user.model";
+import User from "@/lib/db/models/user.model";
 export default async function adduser(user: CreateUserParams) {
   try {
     await connectDb();
