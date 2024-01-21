@@ -67,7 +67,7 @@ export default async function handler(
     const user = {
       clerkId: evt.data.id,
       username: evt.data.username!,
-      email: evt.data.email_addresses[0].email_address,
+      // email: evt.data.email_addresses[0].email_address,
       firstName: evt.data.first_name,
       lastName: evt.data.last_name,
       photo: evt.data.image_url,
@@ -82,7 +82,7 @@ export default async function handler(
           },
         });
       }
-      return NextResponse.json({ message: "OK", user: newUser });
+      return res.status(200).json({ message: "OK", user: newUser });
     }
   }
 
