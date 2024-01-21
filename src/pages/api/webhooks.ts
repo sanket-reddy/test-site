@@ -83,7 +83,7 @@ export default async function handler(
           },
         });
       }
-      return NextResponse.json({ message: "OK", user: newUser });
+      return res.status(200).json({ message: "OK", user: newUser });
     }
   }
 
