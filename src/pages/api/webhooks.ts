@@ -64,25 +64,29 @@ export default async function handler(
   const eventType = evt.type;
 
   if (eventType === "user.created") {
-    const user = {
-      clerkId: evt.data.id,
-      username: evt.data.username!,
-      // email: evt.data.email_addresses[0].email_address,
-      firstName: evt.data.first_name,
-      lastName: evt.data.last_name,
-      photo: evt.data.image_url,
-    };
+    try {
+      const user = {
+        clerkId: evt.data.id,
+        username: evt.data.username!,
+        // email: evt.data.email_addresses[0].email_address,
+        firstName: evt.data.first_name,
+        lastName: evt.data.last_name,
+        photo: evt.data.image_url,
+      };
 
-    if (id) {
-      const newUser = await CreateUser(user);
-      if (newUser) {
-        await clerkClient.users.updateUserMetadata(id, {
-          publicMetadata: {
-            userId: newUser._id,
-          },
-        });
+      if (id) {
+        const newUser = await CreateUser(user);
+        if (newUser) {
+          await clerkClient.users.updateUserMetadata(id, {
+            publicMetadata: {
+              userId: newUser._id,
+            },
+          });
+        }
+        return res.status(200).json({ message: "OK", user: newUser });
       }
-      return res.status(200).json({ message: "OK", user: newUser });
+    } catch (error) {
+      return res.status(200).json({ error: "error" });
     }
   }
 
