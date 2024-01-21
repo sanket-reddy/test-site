@@ -2,7 +2,7 @@ import { Webhook } from "svix";
 import { WebhookEvent } from "@clerk/nextjs/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { buffer } from "micro";
-import CreateUser from "../../../lib/db/actions/user.create";
+import CreateUser from "../../lib/db/actions/user.create";
 import { clerkClient } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
