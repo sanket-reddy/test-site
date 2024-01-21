@@ -76,13 +76,6 @@ export default async function handler(
     if (id) {
       const newUser = await CreateUser(user);
 
-      if (newUser) {
-        await clerkClient.users.updateUserMetadata(id, {
-          publicMetadata: {
-            userId: newUser._id,
-          },
-        });
-      }
       return res.status(200).json({ message: "OK", user: newUser });
     }
   }

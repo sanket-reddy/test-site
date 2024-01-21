@@ -6,3 +6,7 @@ export type CreateUserParams = {
   email?: string;
   photo: string;
 };
+
+export type tesParams = {
+  username: string;
+};
