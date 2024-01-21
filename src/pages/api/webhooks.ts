@@ -64,9 +64,27 @@ export default async function handler(
   const eventType = evt.type;
 
   if (eventType === "user.created") {
-    return res
-      .status(200)
-      .json({ message: "the webhook has hit", response: "ok" });
+    const user = {
+      clerkId: evt.data.id,
+      username: evt.data.username!,
+      email: evt.data.email_addresses[0].email_address,
+      firstName: evt.data.first_name,
+      lastName: evt.data.last_name,
+      photo: evt.data.image_url,
+    };
+
+    if (id) {
+      const newUser = await CreateUser(user);
+
+      if (newUser) {
+        await clerkClient.users.updateUserMetadata(id, {
+          publicMetadata: {
+            userId: newUser._id,
+          },
+        });
+      }
+      return NextResponse.json({ message: "OK", user: newUser });
+    }
   }
 
   console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
